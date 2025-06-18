@@ -1,6 +1,63 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
+
 export default function SignupPage() {
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const router = useRouter();
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Signed up!',
+          text: data.message,
+          timer: 1500,
+          showConfirmButton: false,
+        });
+
+        setTimeout(() => {
+          router.push('http://localhost:3000/login');
+        }, 1600);
+
+        setForm({ name: '', email: '', password: '' });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: data.error || 'Signup failed',
+        });
+      }
+    } catch (err) {
+      console.error('Signup error:', err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+        footer: '<a href="#">Why do I have this issue?</a>',
+      });
+    }
+  };
+
   return (
     <div className="flex flex-wrap">
       <div className="flex w-full flex-col md:w-1/2">
@@ -20,14 +77,17 @@ export default function SignupPage() {
             </div>
           </div>
 
-          <form className="flex flex-col pt-3 md:pt-8">
+          <form className="flex flex-col pt-3 md:pt-8" onSubmit={handleSubmit}>
             <div className="flex flex-col pt-4">
               <div className="focus-within:border-b-gray-500 relative flex overflow-hidden border-b-2 transition">
                 <input
                   type="text"
                   id="name"
-                  className="w-full flex-1 appearance-none border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
+                  value={form.name}
+                  onChange={handleChange}
+                  className="w-full flex-1 appearance-none bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
                   placeholder="Full Name"
+                  required
                 />
               </div>
             </div>
@@ -37,8 +97,11 @@ export default function SignupPage() {
                 <input
                   type="email"
                   id="email"
-                  className="w-full flex-1 appearance-none border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
+                  value={form.email}
+                  onChange={handleChange}
+                  className="w-full flex-1 appearance-none bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
                   placeholder="Email"
+                  required
                 />
               </div>
             </div>
@@ -48,8 +111,11 @@ export default function SignupPage() {
                 <input
                   type="password"
                   id="password"
-                  className="w-full flex-1 appearance-none border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
+                  value={form.password}
+                  onChange={handleChange}
+                  className="w-full flex-1 appearance-none bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none"
                   placeholder="Password"
+                  required
                 />
               </div>
             </div>
