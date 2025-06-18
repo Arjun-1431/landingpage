@@ -2,6 +2,9 @@ sub url command
 
 http://localhost:3000/blog
 
+get api url is given below to get all users which is register in a wwbsite
+http://localhost:3000/api/profiles
+
 
 Docker screenshot is given below and in this  screenshot the my-sqlcontainer is running
 
