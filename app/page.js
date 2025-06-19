@@ -3,6 +3,7 @@ import Image from "./components/image";
 import ImageContent from "./components/imageContent";
 import Information from "./components/information";
 import Testimonial from "./components/testimonial";
+import Link from "next/link";
 
 export default function Home() {
 
@@ -52,7 +53,7 @@ export default function Home() {
             </div>
             <div className="flex max-w-xs items-center space-x-2 px-4 py-4 text-sm font-medium text-gray-200">
               
-              <p>Real-Time Collaboration</p>
+              <Link href="/allusers">See All Users</Link>
             </div>
             <div className="flex max-w-xs items-center space-x-2 px-4 py-4 text-sm font-medium text-gray-200">
               <p>Customer Engagement</p>
